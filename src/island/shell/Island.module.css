@@ -1,0 +1,45 @@
+.root {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 0;
+  height: 0;
+  color: var(--island-fg);
+  font-family: var(--font-sans);
+  user-select: none;
+}
+
+.shell {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  background: var(--island-bg);
+  cursor: pointer;
+}
+
+.view {
+  position: absolute;
+  top: 0;
+  left: 50%;
+}
+
+.bubble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--island-bg);
+  cursor: pointer;
+}
+
+.bubbleView {
+  position: absolute;
+  inset: 0;
+}

@@ -1,0 +1,46 @@
+/* Design tokens. Everything visual in the island and the playground reads from here. */
+:root {
+  --font-sans: 'Manrope Variable', 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Island surface: always black, content is white on black. */
+  --island-bg: #000;
+  --island-fg: #fff;
+  --island-fg-2: rgb(255 255 255 / 0.64);
+  --island-fg-3: rgb(255 255 255 / 0.4);
+  --island-fg-4: rgb(255 255 255 / 0.24);
+  --island-fill-1: rgb(255 255 255 / 0.08);
+  --island-fill-2: rgb(255 255 255 / 0.14);
+  --island-fill-3: rgb(255 255 255 / 0.22);
+  --island-hairline: rgb(255 255 255 / 0.12);
+
+  /* Semantic accents. Small areas only: a dot, a glyph, one button. */
+  --island-positive: #30d158;
+  --island-negative: #ff453a;
+  --island-warning: #ffd60a;
+
+  /* Island type scale. */
+  --island-text-xs: 11px;
+  --island-text-sm: 12px;
+  --island-text-md: 13px;
+  --island-text-lg: 15px;
+  --island-text-xl: 17px;
+  --island-text-2xl: 22px;
+  --island-text-3xl: 32px;
+
+  /* Playground chrome: dark, monochrome. */
+  --ui-bg: #09090a;
+  --ui-surface: #111113;
+  --ui-surface-2: #19191c;
+  --ui-surface-3: #222226;
+  --ui-border: rgb(255 255 255 / 0.08);
+  --ui-border-strong: rgb(255 255 255 / 0.16);
+  --ui-fg: #f4f4f5;
+  --ui-fg-2: #a1a1aa;
+  --ui-fg-3: #6b6b74;
+  --ui-radius-sm: 8px;
+  --ui-radius-md: 12px;
+  --ui-radius-lg: 16px;
+
+  /* Multiplies the duration of CSS driven loops. The island shell keeps it in sync with settings.timeScale. */
+  --island-time-scale: 1;
+}
