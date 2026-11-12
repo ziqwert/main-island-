@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { getDefinition, IDLE_ID } from './definitions';
+import { getDefinition, hasDefinition, IDLE_ID, IDLE_KIND } from './definitions';
 import { motionConfig, setMotionConfig } from './motion/config';
-import { sortLive } from './presentation';
+import { IDLE_INSTANCE, sortLive } from './presentation';
 import type { ActivityDefinition, ActivityInstance, IslandSettings, Patch } from './types';
 
 export const DEFAULT_SETTINGS: IslandSettings = {
@@ -22,6 +22,8 @@ const DEFAULT_TRANSIENT_MS = 2600;
 const MAX_QUEUE = 6;
 
 export interface IslandState {
+  /** The always present idle activity. Its data is the hub's state; patch it with `update(IDLE_ID, ...)`. */
+  idle: ActivityInstance;
   /** Running live activities in start order. */
   live: ActivityInstance[];
   /** The alert currently taking over the island. */
@@ -74,6 +76,13 @@ function createInstance(definition: ActivityDefinition, data?: object): Activity
     order: sequence,
     revision: 0,
   };
+}
+
+/** The idle instance with the defaults of its definition, once that is registered. */
+function createIdle(): ActivityInstance {
+  if (!hasDefinition(IDLE_KIND)) return IDLE_INSTANCE;
+  const { defaultData } = getDefinition(IDLE_KIND);
+  return { ...IDLE_INSTANCE, data: typeof defaultData === 'function' ? defaultData() : { ...defaultData } };
 }
 
 function patched(instance: ActivityInstance, patch: Patch<any>): ActivityInstance {
@@ -135,6 +144,7 @@ export const useIslandStore = create<IslandStore>()((set, get) => {
   };
 
   return {
+    idle: createIdle(),
     live: [],
     transient: null,
     queue: [],
@@ -165,6 +175,10 @@ export const useIslandStore = create<IslandStore>()((set, get) => {
     },
 
     update: (idOrKind, patch) => {
+      if (idOrKind === IDLE_ID) {
+        set((state) => ({ idle: patched(state.idle, patch) }));
+        return;
+      }
       const target = findLive(idOrKind);
       if (target) {
         set((state) => ({ live: state.live.map((a) => (a.id === target.id ? patched(a, patch) : a)) }));
@@ -265,7 +279,7 @@ export const useIslandStore = create<IslandStore>()((set, get) => {
     reset: () => {
       clearTimeout(dismissTimer);
       transientHeld = false;
-      set({ live: [], transient: null, queue: [], expandedId: null });
+      set({ idle: createIdle(), live: [], transient: null, queue: [], expandedId: null });
     },
   };
 });

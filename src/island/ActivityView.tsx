@@ -35,9 +35,10 @@ function ControllerHost({ instance }: { instance: ActivityInstance }) {
 
 /** Mounts the headless controller of every running instance. The shell renders this exactly once. */
 export function IslandControllers() {
+  const idle = useIslandStore((state) => state.idle);
   const live = useIslandStore((state) => state.live);
   const transient = useIslandStore((state) => state.transient);
-  const instances = transient ? [...live, transient] : live;
+  const instances = transient ? [idle, ...live, transient] : [idle, ...live];
   return (
     <>
       {instances.map((instance) => (

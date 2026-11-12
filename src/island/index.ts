@@ -1,5 +1,5 @@
 // Public surface of the island. Everything outside src/island imports from here.
-import './registry';
+import './bootstrap';
 
 export type * from './types';
 export type { Presentation, PresentationMode, ResolvedView } from './presentation';

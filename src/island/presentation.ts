@@ -32,6 +32,8 @@ export interface Presentation {
 }
 
 export interface PresentationInput {
+  /** The idle activity with its current data. Defaults to an empty one. */
+  idle?: ActivityInstance;
   live: ActivityInstance[];
   transient: ActivityInstance | null;
   expandedId: string | null;
@@ -73,6 +75,7 @@ export function sortLive(live: ActivityInstance[], lookup: Lookup = getDefinitio
 
 export function resolvePresentation(input: PresentationInput, lookup: Lookup = getDefinition): Presentation {
   const ctx: SizeContext = { attachment: input.attachment };
+  const idle = input.idle ?? IDLE_INSTANCE;
 
   const view = (instance: ActivityInstance, slot: ViewSlot): ResolvedView => {
     const definition = lookup(instance.kind);
@@ -113,12 +116,12 @@ export function resolvePresentation(input: PresentationInput, lookup: Lookup = g
 
   if (input.expandedId) {
     const target =
-      input.expandedId === IDLE_ID ? IDLE_INSTANCE : ordered.find((a) => a.id === input.expandedId);
+      input.expandedId === IDLE_ID ? idle : ordered.find((a) => a.id === input.expandedId);
     if (target) return { mode: 'expanded', main: view(target, 'expanded'), bubble: null };
   }
 
   if (ordered.length === 0) {
-    return { mode: 'idle', main: view(IDLE_INSTANCE, 'compact'), bubble: null };
+    return { mode: 'idle', main: view(idle, 'compact'), bubble: null };
   }
 
   return {
